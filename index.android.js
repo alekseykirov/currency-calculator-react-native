@@ -18,9 +18,14 @@ class Fields extends Component {
     constructor(props) {
           super(props);
           this.state = {
-            activity: true,
+            activity: false,
           };
         }
+
+
+    remove() {
+        this.props.remove(this.props.index);
+    }
 
     renderActive() {
         return (
@@ -39,7 +44,7 @@ class Fields extends Component {
             <View style={styles.field}>
                 <Text style={styles.value}> {this.props.children} </Text>
 
-                <TouchableHighlight style={styles.button}>
+                <TouchableHighlight style={styles.button} onPress={this.remove}>
                     <Text>Удалить</Text>
                 </TouchableHighlight>
             </View>
@@ -70,13 +75,24 @@ export default class AwesomeProject extends Component {
         return result;
     }
 
-    addTemplate() {
 
+    removeValue(index) {
+        var arr = this.state.value;
+        arr.splice(index, 1);
+        this.setState({value: arr});
+    }
+
+    addTemplate(value) {
+        console.log("You tapped the button!");
+//TODO доделать
+        var arr = this.state.value;
+        arr.push(value);
+        this.setState({value: arr});
     }
 
     eachValue(value, index) {
         return (
-            <Fields key={index} index={index}>
+            <Fields key={index} index={index} remove={this.removeValue}>
                 {value}
             </Fields>
         )
@@ -88,7 +104,7 @@ export default class AwesomeProject extends Component {
 
 
             <View style={styles.header}>
-                <TouchableHighlight style={styles.button} onPress={this.addTemplate()}>
+                <TouchableHighlight style={styles.button} onPress={this.addTemplate.bind(null, 0)}>
                     <Text>Добавить</Text>
                 </TouchableHighlight>
 
