@@ -9,27 +9,56 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  Image,
   TextInput,
   TouchableHighlight,
   View
 } from 'react-native';
 
+class Fields extends Component {
+    constructor(props) {
+          super(props);
+          this.state = {
+            activity: true,
+          };
+        }
+
+    renderActive() {
+        return (
+            <View style={styles.field}>
+                <TextInput style={styles.input}/>
+
+                <TouchableHighlight style={styles.button}>
+                    <Text>Сохранить</Text>
+                </TouchableHighlight>
+            </View>
+        )
+    }
+
+    renderInactive() {
+        return (
+            <View style={styles.field}>
+                <Text style={styles.value}> {this.props.children} </Text>
+
+                <TouchableHighlight style={styles.button}>
+                    <Text>Удалить</Text>
+                </TouchableHighlight>
+            </View>
+        )
+    }
+
+    render() {
+        return (
+            (this.state.activity == true) ? this.renderActive() : this.renderInactive()
+        )
+    }
+}
+
 export default class AwesomeProject extends Component {
   constructor(props) {
       super(props);
       this.state = {
-        value: [12,24,31],
-        activity: true,
+        value: [1],
       };
-    }
-
-    onPressButton() {
-
-    }
-
-    save() {
-
     }
 
     calcTotal() {
@@ -41,41 +70,17 @@ export default class AwesomeProject extends Component {
         return result;
     }
 
-    renderActive() {
-        return (
-            <View style={styles.main}>
-                <View style={styles.field}>
-                    <TextInput style={styles.input}/>
+    addTemplate() {
 
-                    <TouchableHighlight style={styles.button} onPress={this.save}>
-                        <Text>Сохранить</Text>
-                    </TouchableHighlight>
-                </View>
-            </View>
+    }
+
+    eachValue(value, index) {
+        return (
+            <Fields key={index} index={index}>
+                {value}
+            </Fields>
         )
     }
-
-    renderInactive() {
-        return (
-            <View style={styles.main}>
-                <View style={styles.field}>
-                    <Text style={styles.value}>2211</Text>
-
-                    <TouchableHighlight style={styles.button}>
-                        <Text>Удалить</Text>
-                    </TouchableHighlight>
-                </View>
-            </View>
-        )
-    }
-
-give() {
-    if (this.state.activity) {
-        return this.renderActive()
-    } else {
-        return this.renderInactive()
-    }
- }
 
   render() {
     return (
@@ -83,14 +88,16 @@ give() {
 
 
             <View style={styles.header}>
-                <TouchableHighlight style={styles.button} onPress={this.onPressButton}>
+                <TouchableHighlight style={styles.button} onPress={this.addTemplate()}>
                     <Text>Добавить</Text>
                 </TouchableHighlight>
 
                 <Text style={styles.text}>Сумма, р.</Text>
             </View>
 
-
+            <View style={styles.main}>
+                {this.state.value.map(this.eachValue)}
+            </View>
 
 
             <View style={styles.footer}>
@@ -116,7 +123,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     main: {
-        marginBottom: 5,
+//        marginBottom: 5,
     },
     footer: {
         marginTop: 10,
@@ -126,6 +133,7 @@ const styles = StyleSheet.create({
     field: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        marginBottom: 5,
     },
     input: {
         width: 170,
